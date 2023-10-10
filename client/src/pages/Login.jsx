@@ -6,7 +6,7 @@ const Login = () => {
   const navigation = useNavigation()
   const isSubmitting = navigation.state === 'submitting'
   return (
-    <div className='p-3 mt-10 max-w-md bg-slate-50 mx-auto text-slate-700 text-center rounded-md'>
+    <div className='p-3 mt-10 max-w-md bg-slate-50 mx-auto text-slate-700 text-center rounded-md '>
       <h1 className='text-3xl font-semibold my-5'>Login</h1>
       <Form method='POST' className='flex flex-col gap-4 px-4 '>
         <FormRow
