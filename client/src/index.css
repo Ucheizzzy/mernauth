@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  background: linear-gradient(-225deg, #65379b 0%, #65379b 53%, #65379b 100%);
+  color: #fff;
+}
 @layer components {
   .align-element {
     @apply mx-auto max-w-7xl px-8;
