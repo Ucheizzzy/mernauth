@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .align-element {
+    @apply mx-auto max-w-7xl px-8;
+  }
+  .btn-nice {
+    @apply bg-gradient-to-r from-emerald-500 to-emerald-800 hover:from-emerald-600 hover:to-emerald-400 focus:outline-none  focus:ring focus:ring-emerald-300 active:bg-emerald-700 px-6 py-3 rounded-md text-white font-semibold shadow-md transition duration-300 ease-in-out transform hover:scale-105;
+  }
+}
