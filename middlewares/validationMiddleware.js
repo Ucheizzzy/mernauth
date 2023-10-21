@@ -34,3 +34,14 @@ export const validateRegisterInput = withValidationErrors([
     .isLength({ min: 5 })
     .withMessage('password must be at least 5 characters'),
 ])
+
+export const validateLoginInput = withValidationErrors([
+  body('email')
+    .notEmpty()
+    .withMessage('Email field cannot be empty')
+    .isEmail()
+    .withMessage('Please enter a valid email address'),
+  body('password')
+    .notEmpty()
+    .withMessage('Please enter the password you registered with'),
+])
