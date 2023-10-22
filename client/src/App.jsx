@@ -8,7 +8,8 @@ import {
   Profile,
   Register,
 } from './pages'
-
+import { ErrorElement } from './components'
+import { action as registerAction } from './pages/Register'
 const App = () => {
   const router = createBrowserRouter([
     {
@@ -31,6 +32,8 @@ const App = () => {
         {
           path: 'register',
           element: <Register />,
+          action: registerAction,
+          errorElement: <ErrorElement />,
         },
         {
           path: 'profile',
