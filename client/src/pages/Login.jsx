@@ -1,23 +1,41 @@
-import { Form, Link, redirect, useNavigation } from 'react-router-dom'
+import {
+  Form,
+  Link,
+  redirect,
+  useNavigate,
+  useNavigation,
+} from 'react-router-dom'
 import FormRow from '../components/FormRow'
 import { OAuth } from '../components'
 import customFetch from '../utils/customFetch'
 import { toast } from 'react-toastify'
+import { loginUser } from '../feature/userSlice'
+import { useSelector } from 'react-redux'
 
-export const action = async ({ request }) => {
-  const formData = await request.formData()
-  const loginData = Object.fromEntries(formData)
+export const action =
+  (store) =>
+  async ({ request }) => {
+    const formData = await request.formData()
+    const loginData = Object.fromEntries(formData)
 
-  try {
-    const { data } = await customFetch.post('/auth/login', loginData)
-    toast.success(`Welcome back ${data?.user?.username}`)
-    return redirect('/')
-  } catch (error) {
-    toast.error(error?.response?.data?.msg)
-    return error
+    try {
+      const { data } = await customFetch.post('/auth/login', loginData)
+      store.dispatch(loginUser(data))
+      toast.success(`Welcome back ${data?.user?.username}`)
+      return redirect('/')
+    } catch (error) {
+      toast.error(error?.response?.data?.msg)
+      return error
+    }
   }
-}
 const Login = () => {
+  const navigate = useNavigate()
+  const { currentUser } = useSelector((state) => state.userState)
+  if (currentUser) {
+    toast.error(`${currentUser?.username} is logged in, logout first!`)
+    navigate('/profile')
+    return
+  }
   const navigation = useNavigation()
   const isSubmitting = navigation.state === 'submitting'
   return (

@@ -1,8 +1,14 @@
+import { useSelector } from 'react-redux'
 const Landing = () => {
+  const { currentUser } = useSelector((state) => state.userState)
+
   return (
     <div className='px-10 py-10 max-w-2xl mx-auto text-center bg-slate-50 rounded-md mt-10'>
       <h1 className='text-3xl font-bold  mb-4 text-slate-800 capitalize'>
-        Welcome to my Auth App!
+        {currentUser
+          ? `Hello ${currentUser?.username} Welcome back!`
+          : 'Welcome to my Auth App!'}
+        .
       </h1>
       <p className='mb-4 text-slate-700'>
         This is a full-stack web application built with the MERN (MongoDB,

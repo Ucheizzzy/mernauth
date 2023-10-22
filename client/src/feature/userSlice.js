@@ -1,14 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit'
 
+const getUserFromLocalStorage = () => {
+  return JSON.parse(localStorage.getItem('user')) || null
+}
 const initialState = {
-  currentUser: null,
+  currentUser: getUserFromLocalStorage(),
 }
 const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
     loginUser: (state, { payload }) => {
-      console.log(payload)
+      const user = payload.user
+      state.currentUser = user
+      localStorage.setItem('user', JSON.stringify(user))
     },
   },
 })

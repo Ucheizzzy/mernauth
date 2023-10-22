@@ -9,6 +9,8 @@ import {
   Register,
 } from './pages'
 import { ErrorElement } from './components'
+
+import { store } from './store'
 import { action as registerAction } from './pages/Register'
 import { action as loginAction } from './pages/Login'
 const App = () => {
@@ -29,7 +31,7 @@ const App = () => {
         {
           path: 'login',
           element: <Login />,
-          action: loginAction,
+          action: loginAction(store),
         },
         {
           path: 'register',
