@@ -28,14 +28,16 @@ export const action =
       return error
     }
   }
-const Login = () => {
-  const navigate = useNavigate()
-  const { currentUser } = useSelector((state) => state.userState)
+
+export const loader = (store) => () => {
+  const { currentUser } = store.getState().userState
   if (currentUser) {
-    toast.error(`${currentUser?.username} is logged in, logout first!`)
-    navigate('/profile')
-    return
+    toast.warn(`${currentUser?.username} is still logged in. Logout first`)
+    return redirect('/profile')
   }
+  return null
+}
+const Login = () => {
   const navigation = useNavigation()
   const isSubmitting = navigation.state === 'submitting'
   return (
