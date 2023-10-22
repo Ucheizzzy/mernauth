@@ -1,7 +1,22 @@
-import { Form, Link, useNavigation } from 'react-router-dom'
+import { Form, Link, redirect, useNavigation } from 'react-router-dom'
 import FormRow from '../components/FormRow'
 import { OAuth } from '../components'
+import customFetch from '../utils/customFetch'
+import { toast } from 'react-toastify'
 
+export const action = async ({ request }) => {
+  const formData = await request.formData()
+  const loginData = Object.fromEntries(formData)
+
+  try {
+    const { data } = await customFetch.post('/auth/login', loginData)
+    toast.success(`Welcome back ${data?.user?.username}`)
+    return redirect('/')
+  } catch (error) {
+    toast.error(error?.response?.data?.msg)
+    return error
+  }
+}
 const Login = () => {
   const navigation = useNavigation()
   const isSubmitting = navigation.state === 'submitting'

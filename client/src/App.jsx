@@ -10,6 +10,7 @@ import {
 } from './pages'
 import { ErrorElement } from './components'
 import { action as registerAction } from './pages/Register'
+import { action as loginAction } from './pages/Login'
 const App = () => {
   const router = createBrowserRouter([
     {
@@ -28,6 +29,7 @@ const App = () => {
         {
           path: 'login',
           element: <Login />,
+          action: loginAction,
         },
         {
           path: 'register',
