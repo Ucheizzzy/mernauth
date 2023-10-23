@@ -6,7 +6,7 @@ const Landing = () => {
     <div className='px-10 py-10 max-w-2xl mx-auto text-center bg-slate-50 rounded-md mt-10'>
       <h1 className='text-3xl font-bold  mb-4 text-slate-800 capitalize'>
         {currentUser
-          ? `Hello ${currentUser?.username} Welcome back!`
+          ? `Hello ${currentUser?.name} Welcome back!`
           : 'Welcome to my Auth App!'}
         .
       </h1>

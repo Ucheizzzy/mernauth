@@ -23,7 +23,7 @@ const Profile = () => {
   const handleLogoutUser = async () => {
     navigate('/')
     await customFetch.get('/auth/logout')
-    toast.success(`See you soon ${currentUser?.username}`)
+    toast.success(`See you soon ${currentUser?.name}`)
     dispatch(logoutUser())
   }
   return (
@@ -32,9 +32,9 @@ const Profile = () => {
       <Form method='POST' className='flex flex-col gap-4 px-4 '>
         <FormRow
           type='text'
-          name='username'
-          labelText='Username'
-          defaultValue={currentUser?.username}
+          name='name'
+          labelText='Name'
+          defaultValue={currentUser?.name}
         />
         <FormRow
           type='email'

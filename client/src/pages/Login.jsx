@@ -1,16 +1,9 @@
-import {
-  Form,
-  Link,
-  redirect,
-  useNavigate,
-  useNavigation,
-} from 'react-router-dom'
+import { Form, Link, redirect, useNavigation } from 'react-router-dom'
 import FormRow from '../components/FormRow'
 import { OAuth } from '../components'
 import customFetch from '../utils/customFetch'
 import { toast } from 'react-toastify'
 import { loginUser } from '../feature/userSlice'
-import { useSelector } from 'react-redux'
 
 export const action =
   (store) =>
@@ -21,7 +14,7 @@ export const action =
     try {
       const { data } = await customFetch.post('/auth/login', loginData)
       store.dispatch(loginUser(data))
-      toast.success(`Welcome back ${data?.user?.username}`)
+      toast.success(`Welcome back ${data?.user?.name}`)
       return redirect('/')
     } catch (error) {
       toast.error(error?.response?.data?.msg)
@@ -32,7 +25,7 @@ export const action =
 export const loader = (store) => () => {
   const { currentUser } = store.getState().userState
   if (currentUser) {
-    toast.warn(`${currentUser?.username} is still logged in. Logout first`)
+    toast.warn(`${currentUser?.name} is still logged in. Logout first`)
     return redirect('/profile')
   }
   return null

@@ -16,7 +16,7 @@ const withValidationErrors = (validationValues) => {
 }
 
 export const validateRegisterInput = withValidationErrors([
-  body('username').notEmpty().withMessage('You cannot be nameless'),
+  body('name').notEmpty().withMessage('You cannot be nameless'),
   body('email')
     .notEmpty()
     .withMessage('email is required')
