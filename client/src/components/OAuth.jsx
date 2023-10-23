@@ -2,26 +2,29 @@ import { toast } from 'react-toastify'
 import { GoogleAuthProvider, signInWithPopup, getAuth } from 'firebase/auth'
 import { app } from '../firebase'
 import customFetch from '../utils/customFetch'
-import { redirect } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { loginUser } from '../feature/userSlice'
 const OAuth = () => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const handleGoogleClick = async () => {
     try {
       const provider = new GoogleAuthProvider()
       const auth = getAuth(app)
       const result = await signInWithPopup(auth, provider)
-      const { displayName, email, photoURL } = result.user
-      const { data } = await customFetch.post(
-        '/auth/google',
-        displayName,
-        email,
-        photoURL
-      )
+      const { displayName: name, email, photoURL: avatar } = result.user
+      const json = JSON.stringify({ name, email, avatar })
+      const { data } = await customFetch.post('/auth/google', json, {
+        headers: {
+          // Overwrite Axios's automatically set Content-Type
+          'Content-Type': 'application/json',
+        },
+      })
+      console.log(data)
       dispatch(loginUser(data))
       toast.success('Login with google successful')
-      redirect('/')
+      navigate('/')
     } catch (error) {
       toast.error(error)
     }
