@@ -21,7 +21,6 @@ const OAuth = () => {
           'Content-Type': 'application/json',
         },
       })
-      console.log(data)
       dispatch(loginUser(data))
       toast.success('Login with google successful')
       navigate('/')

@@ -6,6 +6,7 @@ import { toast } from 'react-toastify'
 import { logoutUser } from '../feature/userSlice'
 
 export const loader = (store) => () => {
+  //private route
   const { currentUser } = store.getState().userState
   if (!currentUser) {
     toast.warn('You must be logged in to see profile')
