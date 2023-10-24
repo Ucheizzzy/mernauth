@@ -25,7 +25,7 @@ const OAuth = () => {
       toast.success('Login with google successful')
       navigate('/')
     } catch (error) {
-      toast.error(error)
+      toast.error(error?.response?.data?.msg)
     }
   }
   return (

@@ -1,9 +1,16 @@
-import { Form, redirect, useNavigate, useNavigation } from 'react-router-dom'
+import {
+  Form,
+  redirect,
+  useLoaderData,
+  useNavigate,
+  useNavigation,
+} from 'react-router-dom'
 import { FormRow } from '../components'
 import { useDispatch, useSelector } from 'react-redux'
 import customFetch from '../utils/customFetch'
 import { toast } from 'react-toastify'
 import { logoutUser } from '../feature/userSlice'
+import { useRef } from 'react'
 
 export const loader = (store) => () => {
   //private route
@@ -12,11 +19,14 @@ export const loader = (store) => () => {
     toast.warn('You must be logged in to see profile')
     return redirect('/login')
   }
-  return null
+  return currentUser
 }
 
 const Profile = () => {
-  const { currentUser } = useSelector((state) => state.userState)
+  const fileRef = useRef()
+  // const { currentUser } = useSelector((state) => state.userState)
+  const currentUser = useLoaderData()
+
   const navigation = useNavigation()
   const isSubmitting = navigation.state === 'submitting'
   const navigate = useNavigate()
@@ -31,6 +41,19 @@ const Profile = () => {
     <div className='p-3 mt-10 max-w-md bg-slate-50 mx-auto text-slate-700 text-center rounded-md'>
       <h1 className='text-3xl font-semibold my-5'>Profile</h1>
       <Form method='POST' className='flex flex-col gap-4 px-4 '>
+        <input
+          type='file'
+          name='avatar'
+          accept='image/*'
+          ref={fileRef}
+          hidden
+        />
+        <img
+          src={currentUser?.avatar}
+          alt={currentUser?.name}
+          className='h-24 w-24 self-center rounded-full object-cover cursor-pointer'
+          onClick={() => fileRef.current.click()}
+        />
         <FormRow
           type='text'
           name='name'
