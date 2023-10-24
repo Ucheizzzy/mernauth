@@ -44,8 +44,7 @@ export const action =
   }
 
 const Profile = () => {
-  const [image, setImage] = useState(undefined)
-  const fileRef = useRef()
+  // const fileRef = useRef()
   // const { currentUser } = useSelector((state) => state.userState)
   const currentUser = useLoaderData()
 
@@ -53,6 +52,7 @@ const Profile = () => {
   const isSubmitting = navigation.state === 'submitting'
   const navigate = useNavigate()
   const dispatch = useDispatch()
+
   const handleLogoutUser = async () => {
     navigate('/')
     await customFetch.get('/auth/logout')
@@ -63,29 +63,13 @@ const Profile = () => {
     <div className='p-3 mt-10 max-w-md bg-slate-50 mx-auto text-slate-700 text-center rounded-md'>
       <h1 className='text-3xl font-semibold my-5'>Profile</h1>
       <Form method='POST' className='flex flex-col gap-4 px-4 '>
-        <input
-          type='file'
-          name='avatar'
-          accept='image/*'
-          ref={fileRef}
-          hidden
-          onChange={(e) => setImage(e.target.files[0])}
-        />
+        <input type='file' name='avatar' accept='image/*' />
         <img
           src={currentUser?.avatar}
           alt={currentUser?.name}
           className='h-24 w-24 self-center rounded-full object-cover cursor-pointer'
-          onClick={() => fileRef.current.click()}
         />
-        <p
-          className={
-            image ? 'text-green-700 text-sm' : 'text-purple-800 text-sm'
-          }
-        >
-          {image
-            ? 'Image selected'
-            : 'click the avatar to select image max(0.5MB)'}
-        </p>
+
         <FormRow
           type='text'
           name='name'

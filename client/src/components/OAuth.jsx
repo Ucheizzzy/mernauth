@@ -22,6 +22,7 @@ const OAuth = () => {
         },
       })
       dispatch(loginUser(data))
+      console.log(data.avatar)
       toast.success('Login with google successful')
       navigate('/')
     } catch (error) {

@@ -1,12 +1,13 @@
 import multer from 'multer'
-import DataURIParser from 'datauri/parser.js'
+import DataParser from 'datauri/parser.js'
 import path from 'path'
 
 const storage = multer.memoryStorage()
 const upload = multer({ storage })
-const parser = new DataURIParser()
+const parser = new DataParser()
 export const formatImage = (file) => {
   const fileExtension = path.extname(file.originalname).toString()
+  console.log(fileExtension)
   if (
     fileExtension !== '.png' &&
     fileExtension !== '.jpg' &&
