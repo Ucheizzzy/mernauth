@@ -45,3 +45,19 @@ export const validateLoginInput = withValidationErrors([
     .notEmpty()
     .withMessage('Please enter the password you registered with'),
 ])
+
+export const validateUpdateUserInput = withValidationErrors([
+  body('name').notEmpty().withMessage('name cannot be empty while updating'),
+  body('email')
+    .notEmpty()
+    .withMessage('email cannot be empty')
+    .isEmail()
+    .withMessage('Please your email is not valid')
+    .custom(async (email, { req }) => {
+      const user = await User.findOne({ email })
+      //to make sure that i can update profile without changing my email and also i cannot use someone else's email while doing that
+      if (user && user._id.toString() !== req.user.userId) {
+        throw new BadRequestError('email already exist')
+      }
+    }),
+])
