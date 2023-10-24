@@ -1,6 +1,7 @@
 import {
   Form,
   redirect,
+  useActionData,
   useLoaderData,
   useNavigate,
   useNavigation,
@@ -9,8 +10,8 @@ import { FormRow } from '../components'
 import { useDispatch, useSelector } from 'react-redux'
 import customFetch from '../utils/customFetch'
 import { toast } from 'react-toastify'
-import { logoutUser } from '../feature/userSlice'
-import { useRef } from 'react'
+import { logoutUser, updateUser } from '../feature/userSlice'
+import { useRef, useState } from 'react'
 
 export const loader = (store) => () => {
   //private route
@@ -22,7 +23,28 @@ export const loader = (store) => () => {
   return currentUser
 }
 
+export const action =
+  (store) =>
+  async ({ request }) => {
+    const formData = await request.formData()
+    const file = formData.get('avatar')
+    if (file && file.size > 500000) {
+      toast.error('Image size too large')
+      return null
+    }
+    try {
+      const { data } = await customFetch.patch('/user/update-user', formData)
+      store.dispatch(updateUser(data))
+      toast.success('profile updated successfully')
+      return redirect('/')
+    } catch (error) {
+      toast.error(error?.response?.data?.msg)
+      return error
+    }
+  }
+
 const Profile = () => {
+  const [image, setImage] = useState(undefined)
   const fileRef = useRef()
   // const { currentUser } = useSelector((state) => state.userState)
   const currentUser = useLoaderData()
@@ -47,6 +69,7 @@ const Profile = () => {
           accept='image/*'
           ref={fileRef}
           hidden
+          onChange={(e) => setImage(e.target.files[0])}
         />
         <img
           src={currentUser?.avatar}
@@ -54,6 +77,15 @@ const Profile = () => {
           className='h-24 w-24 self-center rounded-full object-cover cursor-pointer'
           onClick={() => fileRef.current.click()}
         />
+        <p
+          className={
+            image ? 'text-green-700 text-sm' : 'text-purple-800 text-sm'
+          }
+        >
+          {image
+            ? 'Image selected'
+            : 'click the avatar to select image max(0.5MB)'}
+        </p>
         <FormRow
           type='text'
           name='name'

@@ -13,6 +13,7 @@ import { ErrorElement } from './components'
 import { store } from './store'
 import { action as registerAction } from './pages/Register'
 import { action as loginAction } from './pages/Login'
+import { action as profileAction } from './pages/Profile'
 import { loader as profileLoader } from './pages/Profile'
 import { loader as loginLoader } from './pages/Login'
 const router = createBrowserRouter([
@@ -45,6 +46,7 @@ const router = createBrowserRouter([
         path: 'profile',
         element: <Profile />,
         loader: profileLoader(store),
+        action: profileAction(store),
         errorElement: <ErrorElement />,
       },
     ],

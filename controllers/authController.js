@@ -50,9 +50,7 @@ export const google = async (req, res) => {
       Math.random().toString(36).slice(-8)
     const hashed = await hashedPassword(generatedPassword)
     const googleUser = new User({
-      name:
-        req.body.name.split(' ').join('').toLowerCase() +
-        Math.random().toString(36).slice(-8),
+      name: req.body.name,
       email: req.body.email,
       password: hashed,
       avatar: req.body.avatar,
