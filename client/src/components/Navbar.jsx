@@ -23,7 +23,7 @@ const Navbar = () => {
               src={currentUser?.avatar}
               alt={currentUser?.name}
               className='h-7 w-7 rounded-full object-cover'
-              referrerpolicy='no-referrer'
+              referrerPolicy='no-referrer'
             />
           </Link>
         ) : (
