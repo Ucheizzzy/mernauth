@@ -21,8 +21,9 @@ const Navbar = () => {
           <Link to='/profile'>
             <img
               src={currentUser?.avatar}
-              alt=''
+              alt={currentUser?.name}
               className='h-7 w-7 rounded-full object-cover'
+              referrerpolicy='no-referrer'
             />
           </Link>
         ) : (

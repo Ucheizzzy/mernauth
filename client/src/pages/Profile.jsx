@@ -13,16 +13,6 @@ import { toast } from 'react-toastify'
 import { logoutUser, updateUser } from '../feature/userSlice'
 import { useRef, useState } from 'react'
 
-export const loader = (store) => () => {
-  //private route
-  const { currentUser } = store.getState().userState
-  if (!currentUser) {
-    toast.warn('You must be logged in to see profile')
-    return redirect('/login')
-  }
-  return currentUser
-}
-
 export const action =
   (store) =>
   async ({ request }) => {
@@ -34,14 +24,25 @@ export const action =
     }
     try {
       const { data } = await customFetch.patch('/user/update-user', formData)
+      console.log(data)
       store.dispatch(updateUser(data))
       toast.success('profile updated successfully')
-      return redirect('/')
+      return redirect('/profile')
     } catch (error) {
       toast.error(error?.response?.data?.msg)
       return error
     }
   }
+
+export const loader = (store) => () => {
+  //private route
+  const { currentUser } = store.getState().userState
+  if (!currentUser) {
+    toast.warn('You must be logged in to see profile')
+    return redirect('/login')
+  }
+  return currentUser
+}
 
 const Profile = () => {
   // const fileRef = useRef()
@@ -82,7 +83,6 @@ const Profile = () => {
           labelText='Email'
           defaultValue={currentUser?.email}
         />
-        <FormRow type='password' name='password' labelText='Password' />
 
         <button
           type='submit'

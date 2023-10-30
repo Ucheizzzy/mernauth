@@ -17,12 +17,10 @@ const OAuth = () => {
       const json = JSON.stringify({ name, email, avatar })
       const { data } = await customFetch.post('/auth/google', json, {
         headers: {
-          // Overwrite Axios's automatically set Content-Type
           'Content-Type': 'application/json',
         },
       })
       dispatch(loginUser(data))
-      console.log(data.avatar)
       toast.success('Login with google successful')
       navigate('/')
     } catch (error) {

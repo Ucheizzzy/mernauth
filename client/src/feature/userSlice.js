@@ -20,7 +20,10 @@ const userSlice = createSlice({
       localStorage.removeItem('user')
     },
     updateUser: (state, { payload }) => {
-      state.currentUser = payload.user
+      const user = payload.user
+      state.currentUser = user
+      // console.log(user)
+      localStorage.setItem('user', JSON.stringify(user))
     },
   },
 })
