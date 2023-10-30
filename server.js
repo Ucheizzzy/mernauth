@@ -11,13 +11,9 @@ import userRouter from './routes/userRouter.js'
 import errorHandlerMiddleware from './middlewares/errorHandlerMiddleware.js'
 import { authenticatedUser } from './middlewares/authMiddleware.js'
 import cookieParser from 'cookie-parser'
-import cloudinary from 'cloudinary'
+import helmet from 'helmet'
+import mongoSanitize from 'express-mongo-sanitize'
 
-cloudinary.config({
-  cloud_name: process.env.CLOUD_NAME,
-  api_key: process.env.CLOUD_API_KEY,
-  api_secret: process.env.CLOUD_API_SECRET,
-})
 
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'))
@@ -25,6 +21,8 @@ if (process.env.NODE_ENV === 'development') {
 
 app.use(express.json())
 app.use(cookieParser())
+app.use(helmet())
+app.use(mongoSanitize())
 
 app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/user', authenticatedUser, userRouter)

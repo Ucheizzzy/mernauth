@@ -8,7 +8,7 @@ import { FormRow } from '../components'
 import { useDispatch, useSelector } from 'react-redux'
 import customFetch from '../utils/customFetch'
 import { toast } from 'react-toastify'
-import { logoutUser, updateUser } from '../feature/userSlice'
+import { deleteUser, logoutUser, updateUser } from '../feature/userSlice'
 import { useEffect, useRef, useState } from 'react'
 import {
   getDownloadURL,
@@ -17,6 +17,7 @@ import {
   uploadBytesResumable,
 } from 'firebase/storage'
 import { app } from '../firebase'
+import Swal from 'sweetalert2'
 
 export const loader = (store) => () => {
   //private route
@@ -34,6 +35,11 @@ const Profile = () => {
   const [imagePercent, setImagePercent] = useState(0)
   const [imageError, setImageError] = useState(false)
   const [formData, setFormData] = useState({})
+  const navigate = useNavigate()
+  const currentUser = useLoaderData()
+  const navigation = useNavigation()
+  const isSubmitting = navigation.state === 'submitting'
+  const dispatch = useDispatch()
 
   useEffect(() => {
     if (image) handleFileUpload(image)
@@ -63,23 +69,49 @@ const Profile = () => {
   }
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: [e.target.value] })
+    setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    try {
+      const { data } = await customFetch.patch('/user/update-user', formData)
+      console.log(data)
+      dispatch(updateUser(data))
+      toast.success(data?.msg || 'User updated successfully')
+    } catch (error) {
+      toast.error(error?.response?.data?.msg)
+    }
   }
-  const currentUser = useLoaderData()
-  const navigation = useNavigation()
-  const isSubmitting = navigation.state === 'submitting'
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
 
   const handleLogoutUser = async () => {
     navigate('/')
     await customFetch.get('/auth/logout')
     toast.success(`See you soon ${currentUser?.name}`)
     dispatch(logoutUser())
+  }
+
+  const handleDelete = async () => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const { data } = await customFetch.delete('/user/delete-user')
+          dispatch(deleteUser(data))
+          navigate('/')
+        } catch (error) {
+          toast.error(error?.response?.data?.msg)
+        }
+        Swal.fire('Deleted!', 'So sad to see you go. Thanks though!', 'success')
+      }
+    })
   }
   return (
     <div className='p-3 mt-10 max-w-md bg-slate-50 mx-auto text-slate-700 text-center rounded-md'>
@@ -117,20 +149,32 @@ const Profile = () => {
             ''
           )}
         </p>
-        <FormRow
-          type='text'
-          name='name'
-          labelText='Name'
-          defaultValue={currentUser?.name}
-          onChange={handleChange}
-        />
-        <FormRow
-          type='email'
-          name='email'
-          labelText='Email'
-          defaultValue={currentUser?.email}
-          onChange={handleChange}
-        />
+        <div className='flex flex-col'>
+          <label htmlFor='email' className='text-start my-2 text-md '>
+            Name
+          </label>
+          <input
+            type='text'
+            name='name'
+            className='bg-slate-200 rounded-lg p-3'
+            defaultValue={currentUser?.name}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className='flex flex-col'>
+          <label htmlFor='email' className='text-start my-2 text-md '>
+            Email
+          </label>
+          <input
+            type='email'
+            name='email'
+            className='bg-slate-200 rounded-lg p-3'
+            defaultValue={currentUser?.email}
+            onChange={handleChange}
+            required
+          />
+        </div>
         <div className='flex flex-col'>
           <label htmlFor='password' className='text-start my-2 text-md '>
             Password
@@ -153,7 +197,9 @@ const Profile = () => {
         </button>
       </form>
       <div className='flex justify-between items-center my-6'>
-        <span className='text-red-600 cursor-pointer'>Delete Account</span>
+        <span className='text-red-600 cursor-pointer' onClick={handleDelete}>
+          Delete Account
+        </span>
         <span
           className='text-red-800 cursor-pointer'
           onClick={handleLogoutUser}

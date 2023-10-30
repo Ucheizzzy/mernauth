@@ -37,18 +37,8 @@ const Login = () => {
     <div className='p-3 mt-10 max-w-md bg-slate-50 mx-auto text-slate-700 text-center rounded-md '>
       <h1 className='text-3xl font-semibold my-5'>Login</h1>
       <Form method='POST' className='flex flex-col gap-4 px-4 '>
-        <FormRow
-          type='email'
-          name='email'
-          labelText='Email'
-          defaultValue='uche@gmail.com'
-        />
-        <FormRow
-          type='password'
-          name='password'
-          labelText='Password'
-          defaultValue='secret'
-        />
+        <FormRow type='email' name='email' labelText='Email' />
+        <FormRow type='password' name='password' labelText='Password' />
         <button type='submit' className='btn-nice' disabled={isSubmitting}>
           {isSubmitting ? 'Loading..' : 'Submit'}
         </button>

@@ -25,8 +25,13 @@ const userSlice = createSlice({
       // console.log(user)
       localStorage.setItem('user', JSON.stringify(user))
     },
+    deleteUser: (state) => {
+      state.currentUser = null
+      localStorage.removeItem('user')
+    },
   },
 })
 
-export const { loginUser, logoutUser, updateUser } = userSlice.actions
+export const { loginUser, logoutUser, updateUser, deleteUser } =
+  userSlice.actions
 export default userSlice.reducer

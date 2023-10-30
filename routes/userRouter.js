@@ -1,11 +1,9 @@
 import { Router } from 'express'
-import { updateUser } from '../controllers/userController.js'
-import { validateUpdateUserInput } from '../middlewares/validationMiddleware.js'
-import upload from '../middlewares/multerMiddleware.js'
+import { deleteUser, updateUser } from '../controllers/userController.js'
+
 const router = Router()
 
-router
-  .route('/update-user')
-  .patch(upload.single('avatar'), validateUpdateUserInput, updateUser)
+router.route('/update-user').patch(updateUser)
+router.route('/delete-user').delete(deleteUser)
 
 export default router
