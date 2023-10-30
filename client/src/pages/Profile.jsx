@@ -1,10 +1,5 @@
-import {
-  redirect,
-  useLoaderData,
-  useNavigate,
-  useNavigation,
-} from 'react-router-dom'
-import { FormRow } from '../components'
+import { redirect, useLoaderData, useNavigate } from 'react-router-dom'
+import { SubmitBtn } from '../components'
 import { useDispatch, useSelector } from 'react-redux'
 import customFetch from '../utils/customFetch'
 import { toast } from 'react-toastify'
@@ -37,8 +32,6 @@ const Profile = () => {
   const [formData, setFormData] = useState({})
   const navigate = useNavigate()
   const currentUser = useLoaderData()
-  const navigation = useNavigation()
-  const isSubmitting = navigation.state === 'submitting'
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -76,9 +69,9 @@ const Profile = () => {
     e.preventDefault()
     try {
       const { data } = await customFetch.patch('/user/update-user', formData)
-      console.log(data)
       dispatch(updateUser(data))
       toast.success(data?.msg || 'User updated successfully')
+      navigate('/')
     } catch (error) {
       toast.error(error?.response?.data?.msg)
     }
@@ -109,7 +102,7 @@ const Profile = () => {
         } catch (error) {
           toast.error(error?.response?.data?.msg)
         }
-        Swal.fire('Deleted!', 'So sad to see you go. Thanks though!', 'success')
+        Swal.fire('Deleted!', 'Thank you for testing. Bye!', 'success')
       }
     })
   }
@@ -188,13 +181,7 @@ const Profile = () => {
           />
         </div>
 
-        <button
-          type='submit'
-          className='btn-nice uppercase'
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? 'Loading..' : 'Update'}
-        </button>
+        <SubmitBtn title='UPDATE' />
       </form>
       <div className='flex justify-between items-center my-6'>
         <span className='text-red-600 cursor-pointer' onClick={handleDelete}>

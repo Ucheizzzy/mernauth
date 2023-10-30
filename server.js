@@ -13,12 +13,18 @@ import { authenticatedUser } from './middlewares/authMiddleware.js'
 import cookieParser from 'cookie-parser'
 import helmet from 'helmet'
 import mongoSanitize from 'express-mongo-sanitize'
+// public
+import { dirname } from 'path'
+import { fileURLToPath } from 'url'
+import path from 'path'
 
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'))
 }
 
+app.use(express.static(path.resolve(__dirname, './client/dist')))
 app.use(express.json())
 app.use(cookieParser())
 app.use(helmet())
@@ -29,6 +35,10 @@ app.use('/api/v1/user', authenticatedUser, userRouter)
 
 app.get('/api/v1', (req, res) => {
   res.json({ msg: 'Hello' })
+})
+
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, './client/dist', 'index.html'))
 })
 
 app.use('*', (req, res) => {

@@ -1,6 +1,6 @@
-import { Form, Link, redirect, useNavigation } from 'react-router-dom'
+import { Form, Link, redirect } from 'react-router-dom'
 import FormRow from '../components/FormRow'
-import { OAuth } from '../components'
+import { OAuth, SubmitBtn } from '../components'
 import customFetch from '../utils/customFetch'
 import { toast } from 'react-toastify'
 export const action = async ({ request }) => {
@@ -16,8 +16,6 @@ export const action = async ({ request }) => {
   }
 }
 const Register = () => {
-  const navigation = useNavigation()
-  const isSubmitting = navigation.state === 'submitting'
   return (
     <div className='p-3 mt-10 max-w-md bg-slate-50 mx-auto text-slate-700 text-center rounded-md'>
       <h1 className='text-3xl font-semibold my-5'>Register</h1>
@@ -25,10 +23,7 @@ const Register = () => {
         <FormRow type='text' name='name' labelText='Name' />
         <FormRow type='email' name='email' labelText='Email' />
         <FormRow type='password' name='password' labelText='Password' />
-        <button type='submit' className='btn-nice' disabled={isSubmitting}>
-          {isSubmitting ? 'Loading..' : 'Submit'}
-        </button>
-
+        <SubmitBtn title='REGISTER' />
         <OAuth />
       </Form>
       <div className='flex gap-2 text-center justify-center items-center my-6'>
